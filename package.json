@@ -1,0 +1,16 @@
+{
+  "name": "unity-game-dev-project-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dgt-net": "^1.0.1",
+    "nodemon": "^1.11.0"
+  }
+}
