@@ -22,7 +22,10 @@ var packet = {
   SC_PING_SUCCESS: 20002,
   SC_QUESTION: 20003,
   SC_CHAT: 20004,
+  SC_NEW_PLAYER: 20005,
+  SC_ALL_PLAYERS_INFO:20006
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Received Packets
@@ -31,6 +34,8 @@ var packet = {
 packet[packet.CS_LOGIN] = function (remoteProxy, data) {
   if (!data.completed()) return true;
   remoteProxy.login();
+  remoteProxy.newPlayer();
+  remoteProxy.getAllplayersInfo();
 }
 
 packet[packet.CS_PING] = function (remoteProxy, data) {
@@ -74,6 +79,29 @@ packet.make_ping_success = function (ping_time) {
 packet.make_chat = function (msg) {
   var o = new packet_writer(packet.SC_CHAT);
   o.append_string(msg);
+  o.finish();
+  return o.buffer;
+}
+
+packet.make_new_player = (msg) => {
+  let o = new packet_writer(packet.SC_NEW_PLAYER)
+  o.append_string(msg);
+  o.finish();
+  return o.buffer;
+}
+
+packet.make_all_player_info = (players) => {
+  let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO)
+  let playerLength = players.length
+  o.append_uint8(playerLength)
+  players.forEach((player) => {
+    console.log("player",player.id)
+    console.log("player - posox",String(player.positionX))
+    o.append_uint32(player.id)
+    o.append_string(String(player.position.x))
+    o.append_string(String(player.position.y))
+  })
+  console.log("output",o)
   o.finish();
   return o.buffer;
 }

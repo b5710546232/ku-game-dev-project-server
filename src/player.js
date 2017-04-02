@@ -1,8 +1,19 @@
 class Player {
-  constructor(id) {
-    this.position = {x:0,y:0}
-    this.id = id
+  constructor() {
+    this.position = {
+      x: randomInt(-5, 5),
+      y: randomInt(-5, 5)
+    }
+    this.positionX = 1.5;
+    this.remotes = []
   }
+  addId(id){
+    this.id = id;
+  }
+  
+}
+let randomInt = (low, high)=> {
+    return Math.floor(Math.random() * (high - low) + low);
 }
 
 module.exports = Player
