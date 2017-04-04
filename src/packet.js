@@ -11,7 +11,8 @@ var packet = {
   CS_PING: 10002,
   CS_QUESTION: 10003,
   CS_CHAT: 10004,
-
+  CS_MOVE_PLAYER: 10005,
+  CS_PLAYERS_INFO: 10006,
 
   ////////////////////////////////////////////////////////////////////////////////
   // Server to Client
@@ -23,7 +24,9 @@ var packet = {
   SC_QUESTION: 20003,
   SC_CHAT: 20004,
   SC_NEW_PLAYER: 20005,
-  SC_ALL_PLAYERS_INFO:20006
+  SC_ALL_PLAYERS_INFO:20006,
+
+  SC_REMOVE_PLAYER: 21001,
 };
 
 
@@ -34,8 +37,9 @@ var packet = {
 packet[packet.CS_LOGIN] = function (remoteProxy, data) {
   if (!data.completed()) return true;
   remoteProxy.login();
-  remoteProxy.newPlayer();
-  remoteProxy.getAllplayersInfo();
+  // remoteProxy.newPlayer();
+  // remoteProxy.getAllplayersInfo();
+  remoteProxy.sendPlayersInfo();
 }
 
 packet[packet.CS_PING] = function (remoteProxy, data) {
@@ -50,7 +54,17 @@ packet[packet.CS_CHAT] = function (remoteProxy, data) {
   remoteProxy.chat(msg);
 }
 
+packet[packet.CS_MOVE_PLAYER] = function(remoteProxy, data) {
+  let h = data.read_float();
+  let v = data.read_float();
+  if (!data.completed()) return true;
+  remoteProxy.updatePlayerPosition(h, v);
+}
 
+packet[packet.CS_PLAYERS_INFO] = function(remoteProxy, data) {
+  if(!data.completed()) return true;
+  remoteProxy.sendPlayersInfo();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Send Packets
@@ -63,8 +77,9 @@ packet.make_error = function (msg) {
   return o.buffer;
 }
 
-packet.make_logged_in = function () {
+packet.make_logged_in = function (id) {
   var o = new packet_writer(packet.SC_LOGGED_IN);
+  o.append_uint8(id);
   o.finish();
   return o.buffer;
 }
@@ -83,12 +98,20 @@ packet.make_chat = function (msg) {
   return o.buffer;
 }
 
-packet.make_new_player = (msg) => {
-  let o = new packet_writer(packet.SC_NEW_PLAYER)
-  o.append_string(msg);
-  o.finish();
-  return o.buffer;
-}
+// packet.make_new_player = (msg) => {
+//   let o = new packet_writer(packet.SC_NEW_PLAYER)
+//   o.append_string(msg);
+//   o.finish();
+//   return o.buffer;
+// }
+
+// packet.make_new_player = (player) => {
+//   let o = new packet_writer(packet.SC_NEW_PLAYER)
+//   o.append_uint8(id);
+//   o.appe
+//   o.finish();
+//   return o.buffer;
+// }
 
 packet.make_all_player_info = (players) => {
   let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO)
@@ -102,6 +125,28 @@ packet.make_all_player_info = (players) => {
     o.append_string(String(player.position.y))
   })
   console.log("output",o)
+  o.finish();
+  return o.buffer;
+}
+
+packet.make_players_info = (players) => {
+  let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO);
+  let playerLength = players.length;
+  o.append_uint8(playerLength);
+  players.forEach((player) => {
+    // console.log("[Packet] Add player#", player.id, " info to packet");
+    o.append_uint8(player.id);
+    o.append_float(player.position.x);
+    o.append_float(player.position.y);
+  })
+  o.finish();
+  return o.buffer;
+}
+
+packet.make_remove_player = (id) => {
+  let o = new packet_writer(packet.SC_REMOVE_PLAYER);
+  o.append_uint8(id);
+  console.log("[Packet] id to be removed #", id);
   o.finish();
   return o.buffer;
 }

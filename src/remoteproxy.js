@@ -41,6 +41,7 @@ class RemoteProxy extends server.RemoteProxy {
     console.log('RemoteProxy ping: ' + pingTime)
     this.send(packet.make_ping_success(pingTime))
   }
+  
   newPlayer(){
     let data = "should add new plaeyer"
     console.log('RemoteProxy new player: ' + data)
