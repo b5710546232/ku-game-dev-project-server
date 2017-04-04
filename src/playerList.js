@@ -12,13 +12,9 @@ class PlayerList {
     this.players.push(player)
   }
 
-<<<<<<< HEAD
-  addPlayer(player) {
-    player.addId(this.ID)
-=======
+
   addPlayer(){
     let player = new Player(this.ID)
->>>>>>> eaef5ed1661ef8a5b5f5c0d25be43fc03dd8b279
     this.players.push(player)
     this.ID++;
   }
@@ -44,12 +40,6 @@ class PlayerList {
     })
   }
 
-<<<<<<< HEAD
-  broadcastExcept(exceptPlayer, data) {
-    this.players.forEach((player) => {
-      if (player == exceptPlayer) return
-      player.send(data)
-=======
   movePlayer(remote,position){
     let index = this.getPlayerIndex(remote);
     console.log(`\n${index} ::: moving\n`)
@@ -62,7 +52,6 @@ class PlayerList {
     this.remotes.forEach((remote) => {
       if (remote == exceptRemote) return
       remote.send(data)
->>>>>>> eaef5ed1661ef8a5b5f5c0d25be43fc03dd8b279
     })
   }
 
