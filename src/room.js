@@ -8,19 +8,25 @@ class Room {
   }
 
   removeRemote(remote) {
-    this.remotes.splice(this.remotes.indexOf(remote), 1)
+    let index = this.remotes.indexOf(remote)
+    this.remotes[index] = null
+    // this.remotes.splice(this.remotes.indexOf(remote), 1)
   }
 
   broadcast(data) {
     this.remotes.forEach((remote) => {
-      remote.send(data)
+      if(remote) {
+        remote.send(data)
+      }
     })
   }
 
   broadcastExcept(exceptRemote, data) {
     this.remotes.forEach((remote) => {
-      if (remote == exceptRemote) return
-      remote.send(data)
+      if (remote == exceptRemote ) return
+      if(remote) {
+        remote.send(data)
+      } 
     })
   }
 }

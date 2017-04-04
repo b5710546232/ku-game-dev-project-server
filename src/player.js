@@ -5,7 +5,7 @@ class Player {
       y: randomInt(-4.5, 4.5)
     },
     this.id = id;
-    this.speed = 1;
+    this.speed = 2;
   }
   
 }
