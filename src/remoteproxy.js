@@ -22,7 +22,10 @@ class RemoteProxy extends server.RemoteProxy {
 
   onDisconnected() {
     console.log("RemoteProxy Disconnected from " + this.getPeerName())
+    let id = playerList.getPlayerIndex(this);
+    playerList.broadcastExcept(this,packet.make_player_disconnect(id))
     playerList.removeRemote(this)
+    console.log("Disconnected from ID" + id)
     room.removeRemote(this)
     this.getAllplayersInfo();
   }
@@ -44,9 +47,12 @@ class RemoteProxy extends server.RemoteProxy {
   newPlayer(){
     let data = "should add new plaeyer"
     console.log('RemoteProxy new player: ' + data)
-    let player = new Player();
     playerList.addRemote(this)
-    playerList.addPlayer(player)
+    playerList.addPlayer()
+
+    let own_id = playerList.getPlayerIndex(this).player_id;
+    console.log('owner_id ',own_id)
+    this.send(packet.make_player_info(own_id))
     playerList.broadcast(packet.make_new_player(data))
   }
 
@@ -55,6 +61,15 @@ class RemoteProxy extends server.RemoteProxy {
     console.log('RemoteProxy playerInfos number :'+PLAYER_LIST.length)
     playerList.broadcast(packet.make_all_player_info(players))
   }
+
+   movePlayer(position){
+    playerList.movePlayer(this,position);
+    let indexPlayer = playerList.remotes.indexOf(this);
+    let PlayerID = playerList.getPlayerIndex(this);
+    console.log('RemoteProxy MovePlayer PID :'+PlayerID)
+    playerList.broadcast(packet.make_all_player_info(players))
+  }
+  
 }
 
 module.exports = RemoteProxy
