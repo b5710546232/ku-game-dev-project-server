@@ -25,6 +25,8 @@ var packet = {
   SC_CHAT: 20004,
   SC_NEW_PLAYER: 20005,
   SC_ALL_PLAYERS_INFO:20006,
+  SC_PLAYER_INFO:20007,
+  SC_PLAYER_DISCONNECT:20008,
 
   SC_REMOVE_PLAYER: 21001,
 };
@@ -61,6 +63,20 @@ packet[packet.CS_MOVE_PLAYER] = function(remoteProxy, data) {
   remoteProxy.updatePlayerPosition(h, v);
 }
 
+// packet[packet.CS_MOVE_PLAYER] =  (remoteProxy, data) => {
+//   let position_x = data.read_float();
+//   let position_y = data.read_float();
+//   if (!data.completed()) return true;
+//   let position = {
+//     x:position_x,
+//     y:position_y
+//   }
+//   remoteProxy.movePlayer(position)
+//   remoteProxy.getAllplayersInfo();
+// }
+
+
+
 packet[packet.CS_PLAYERS_INFO] = function(remoteProxy, data) {
   if(!data.completed()) return true;
   remoteProxy.sendPlayersInfo();
@@ -87,6 +103,12 @@ packet.make_logged_in = function (id) {
 packet.make_ping_success = function (ping_time) {
   var o = new packet_writer(packet.SC_PING_SUCCESS);
   o.append_uint8(ping_time);
+  o.finish();
+  return o.buffer;
+}
+packet.make_player_info = (own_id)=>{
+  let o = new packet_writer(packet.SC_PLAYER_INFO);
+  o.append_uint32(own_id)
   o.finish();
   return o.buffer;
 }
@@ -139,6 +161,13 @@ packet.make_players_info = (players) => {
     o.append_float(player.position.x);
     o.append_float(player.position.y);
   })
+  o.finish();
+  return o.buffer;
+}
+
+packet.make_player_disconnect = (id) => {
+  let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO)
+  o.append_uint32(id)
   o.finish();
   return o.buffer;
 }
