@@ -13,6 +13,7 @@ var packet = {
   CS_CHAT: 10004,
   CS_MOVE_PLAYER: 10005,
   CS_PLAYERS_INFO: 10006,
+  CS_BULLET_INFO: 11002,
 
   ////////////////////////////////////////////////////////////////////////////////
   // Server to Client
@@ -29,6 +30,8 @@ var packet = {
   SC_PLAYER_DISCONNECT:20008,
 
   SC_REMOVE_PLAYER: 21001,
+  SC_BULLET_INFO: 21002,
+
 };
 
 
@@ -63,23 +66,17 @@ packet[packet.CS_MOVE_PLAYER] = function(remoteProxy, data) {
   remoteProxy.updatePlayerPosition(h, v);
 }
 
-// packet[packet.CS_MOVE_PLAYER] =  (remoteProxy, data) => {
-//   let position_x = data.read_float();
-//   let position_y = data.read_float();
-//   if (!data.completed()) return true;
-//   let position = {
-//     x:position_x,
-//     y:position_y
-//   }
-//   remoteProxy.movePlayer(position)
-//   remoteProxy.getAllplayersInfo();
-// }
-
-
-
 packet[packet.CS_PLAYERS_INFO] = function(remoteProxy, data) {
   if(!data.completed()) return true;
   remoteProxy.sendPlayersInfo();
+}
+
+packet[packet.CS_BULLET_INFO] = function(remoteProxy, data) {
+  let x_direction = data.read_float();
+  let y_direction = data.read_float();
+  let z_quaternion = data.read_float();
+  if (!data.completed()) return true;
+  remoteProxy.sendBulletInfo(x_direction, y_direction, z_quaternion);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +177,16 @@ packet.make_remove_player = (id) => {
   return o.buffer;
 }
 
+packet.make_bullet_info = (id, x_direction, y_direction, z_quaternion) => {
+  let o = new packet_writer(packet.SC_BULLET_INFO);
+  o.append_uint8(id);
+  console.log("[Packet] #",id," shot a bullet");
+  o.append_float(x_direction);
+  o.append_float(y_direction);
+  o.append_float(z_quaternion);
+  o.finish();
+  return o.buffer;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Export Module

@@ -44,10 +44,6 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         this.send(packet.make_ping_success(pingTime))
     }
 
-    // sendNewPlayer() {
-    //     room.broadcast(packet.make_new_player(this.player))
-    // }
-
     updatePlayerPosition(h, v) {
         let prevX = this.player.position.x;
         let prevY = this.player.position.y;
@@ -73,6 +69,11 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     removePlayer(id) {
         console.log("[PlayerRmote] removing player#", id)
         room.broadcast(packet.make_remove_player(id))
+    }
+
+    sendBulletInfo(x_direction, y_direction, z_quaternion) {
+        let id = this.player.id
+        room.broadcast(packet.make_bullet_info(id, x_direction, y_direction, z_quaternion))
     }
 
 }
