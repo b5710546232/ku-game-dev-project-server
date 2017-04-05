@@ -53,8 +53,8 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         let prevY = this.player.position.y;
         let judged_h = Math.max( Math.min(h, 1), -1);
         let judged_v = Math.max( Math.min(v, 1), -1);
-        this.player.position.x += judged_h * this.player.speed * 0.05;
-        this.player.position.y += judged_v * this.player.speed * 0.05;
+        this.player.position.x += judged_h * this.player.speed * 0.015;
+        this.player.position.y += judged_v * this.player.speed * 0.015;
         // console.log("[PlayerRemote] Update players's postion from ", prevX,",",prevY, " to ", this.player.position.x,",",this.player.position.y);
     }
 
