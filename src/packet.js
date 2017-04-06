@@ -63,6 +63,7 @@ packet[packet.CS_MOVE_PLAYER] = function(remoteProxy, data) {
   let h = data.read_float();
   let v = data.read_float();
   if (!data.completed()) return true;
+  // console.log("On received player input axes.", h, ", ", v);
   remoteProxy.updatePlayerPosition(h, v);
 }
 
