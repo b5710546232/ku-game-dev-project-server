@@ -52,7 +52,7 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     login() {
         console.log("[PlayerRemote] Login from " + this.getPeerName())
         this.player = new Player(room.remotes.indexOf(this))
-        console.log("[PlayerRemote] Random position x:",this.player.position.x, ", ",this.player.position.y)
+        console.log("[PlayerRemote] Random position x:", this.player.position.x, ", ",this.player.position.y)
         this.send(packet.make_logged_in(this.player.id))
         // this.has_logged_in = true;
     }
