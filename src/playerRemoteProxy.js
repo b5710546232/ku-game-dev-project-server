@@ -37,6 +37,8 @@ class PlayerRemoteProxy extends server.RemoteProxy {
 
     onDisconnected() {
         console.log("[PlayerRemote] Disconnection from " + this.getPeerName())
+
+        this.removePlayer(this.player.id)
         room.removeRemote(this)
         
         // console.log("Remaining Ids:")
@@ -45,7 +47,6 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         //         console.log(remote.player.id)
         //     }
         // })
-        this.removePlayer(this.player.id)
         // Broadcast to other player except itself
     }
 
@@ -90,7 +91,8 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         // console.log("[PlayerRmote] removing player#", id)
         room.broadcast(packet.make_remove_player(id))
         let remoteRemovedPlayer = room.remotes[id]
-        remoteRemovedPlayer.player = new Player(id)
+        let newPlayer = new Player(id)
+        remoteRemovedPlayer.player = newPlayer
         // console.log(remoteRemovedPlayer.player)
 
     }
