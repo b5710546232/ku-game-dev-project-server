@@ -98,6 +98,13 @@ class PlayerRemoteProxy extends server.RemoteProxy {
 
     sendProjectileHit(id) {
         console.log("Id#", id, " got hit broadcasting...")
+        let hitPlayer = room.remotes[id].player
+        console.log("Health = ", hitPlayer.health, " => ", hitPlayer.health - 1)
+        let damage = 1
+        hitPlayer.takeDamage(damage)
+        if(!hitPlayer.isAlive) {
+            this.removePlayer(id)
+        }
     }
 
 }
