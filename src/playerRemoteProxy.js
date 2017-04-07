@@ -87,8 +87,12 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     }
 
     removePlayer(id) {
-        console.log("[PlayerRmote] removing player#", id)
+        // console.log("[PlayerRmote] removing player#", id)
         room.broadcast(packet.make_remove_player(id))
+        let remoteRemovedPlayer = room.remotes[id]
+        remoteRemovedPlayer.player = new Player(id)
+        // console.log(remoteRemovedPlayer.player)
+
     }
 
     sendBulletInfo(x_direction, y_direction, z_quaternion) {

@@ -7,7 +7,7 @@ class Player {
     this.id = id;
     this.speed = 0.15
     this.health = 1,
-    this.isAlive = false
+    this.isAlive = true
   }
 
   //h :  Horizontal Input Axis from Unity
