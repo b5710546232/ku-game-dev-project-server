@@ -63,13 +63,16 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     }
 
     updatePlayerPosition(h, v) {
-        let prevX = this.player.position.x;
-        let prevY = this.player.position.y;
-        // let judged_h = Math.max( Math.min(h, 1), -1);
-        // let judged_v = Math.max( Math.min(v, 1), -1);
-        this.player.position.x += h * this.player.speed;
-        this.player.position.y += v * this.player.speed;
-        // console.log("[PlayerRemote] Update players's postion from ", prevX,",",prevY, " to ", this.player.position.x,",",this.player.position.y);
+        this.player.move(h, v)
+        // let prevX = this.player.position.x;
+        // let prevY = this.player.position.y;
+        // // let judged_h = Math.max( Math.min(h, 1), -1);
+        // // let judged_v = Math.max( Math.min(v, 1), -1);
+        // let newX = this.player.position.x + (h * this.player.speed);
+        // let newY = this.player.position.y + (v * this.player.speed);
+        // this.player.position.x = ( newX * 1000 ) / 1000
+        // this.player.position.y = ( newY * 1000 ) / 1000
+        // // console.log("[PlayerRemote] Update players's postion from ", prevX,",",prevY, " to ", this.player.position.x,",",this.player.position.y);
     }
 
     sendPlayersInfo() {
@@ -91,6 +94,10 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     sendBulletInfo(x_direction, y_direction, z_quaternion) {
         let id = this.player.id
         room.broadcast(packet.make_bullet_info(id, x_direction, y_direction, z_quaternion))
+    }
+
+    sendProjectileHit(id) {
+        console.log("Id#", id, " got hit broadcasting...")
     }
 
 }

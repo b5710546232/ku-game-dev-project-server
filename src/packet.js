@@ -14,6 +14,7 @@ var packet = {
   CS_MOVE_PLAYER: 10005,
   CS_PLAYERS_INFO: 10006,
   CS_BULLET_INFO: 11002,
+  CS_PROJECTILE_HIT: 11003,
 
   ////////////////////////////////////////////////////////////////////////////////
   // Server to Client
@@ -78,6 +79,12 @@ packet[packet.CS_BULLET_INFO] = function(remoteProxy, data) {
   let z_quaternion = data.read_float();
   if (!data.completed()) return true;
   remoteProxy.sendBulletInfo(x_direction, y_direction, z_quaternion);
+}
+
+packet[packet.CS_PROJECTILE_HIT] = function(remoteProxy, data) {
+  let id = data.read_uint8();
+  if(!data.completed()) return true;
+  remoteProxy.sendProjectileHit(id);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
