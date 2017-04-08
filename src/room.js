@@ -49,8 +49,8 @@ class Room {
 
   removeRemote(remote) {
     let index = this.remotes.indexOf(remote)
-    this.remotes[index] = null
-    this.players[index] = null
+    this.remotes[index] = undefined
+    // remote.
     // this.remotes.splice(this.remotes.indexOf(remote), 1)
     // this.players.
   }
