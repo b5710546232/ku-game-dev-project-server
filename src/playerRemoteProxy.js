@@ -38,7 +38,7 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     onDisconnected() {
         console.log("[PlayerRemote] Disconnection from " + this.getPeerName())
 
-        this.removePlayer(this.player.id)
+        // this.removePlayer(this.player.id)
         room.removeRemote(this)
         
         // console.log("Remaining Ids:")

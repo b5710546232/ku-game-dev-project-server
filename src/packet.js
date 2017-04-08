@@ -180,7 +180,7 @@ packet.make_player_disconnect = (id) => {
 packet.make_remove_player = (id) => {
   let o = new packet_writer(packet.SC_REMOVE_PLAYER);
   o.append_uint8(id);
-  console.log("[Packet] id to be removed #", id);
+  // console.log("[Packet] id to be removed #", id);
   o.finish();
   return o.buffer;
 }
@@ -188,7 +188,7 @@ packet.make_remove_player = (id) => {
 packet.make_bullet_info = (id, x_direction, y_direction, z_quaternion) => {
   let o = new packet_writer(packet.SC_BULLET_INFO);
   o.append_uint8(id);
-  console.log("[Packet] #",id," shot a bullet");
+  // console.log("[Packet] #",id," shot a bullet");
   o.append_float(x_direction);
   o.append_float(y_direction);
   o.append_float(z_quaternion);
