@@ -20,7 +20,9 @@ class Room {
         if(remote != null || remote != undefined) {
           if(remote.player != undefined) {
             // console.log(remote.player)
-            this.players.push(remote.player)
+            if(remote.player.isAlive) {
+              this.players.push(remote.player)
+            }
             // info += remote.player.id + ", "
           }
         }

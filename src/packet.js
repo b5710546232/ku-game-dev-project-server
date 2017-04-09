@@ -167,11 +167,13 @@ packet.make_players_info = (players) => {
   let playerLength = players.length;
   o.append_uint8(playerLength);
   players.forEach((player) => {
-    // console.log("[Packet] Add player#", player.id, " info to packet");
-    o.append_uint8(player.id);
-    o.append_float(player.position.x);
-    o.append_float(player.position.y);
-    o.append_uint8(player.health);
+    if(player.isAlive) {
+      // console.log("[Packet] Add player#", player.id, " info to packet");
+      o.append_uint8(player.id);
+      o.append_float(player.position.x);
+      o.append_float(player.position.y);
+      o.append_uint16(player.health);
+    }
   })
   o.finish();
   return o.buffer;

@@ -91,7 +91,8 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     removePlayer(id) {
         // console.log("[PlayerRmote] removing player#", id)
         room.broadcast(packet.make_remove_player(id))
-        let remoteRemovedPlayer = room.remotes[id]
+        // let remoteRemovedPlayer = room.remotes[id]
+        // remoteRemovedPlayer.player.isAli
         // if(remoteRemovedPlayer) {
         //     let newPlayer = new Player(id)
         //     remoteRemovedPlayer.player = newPlayer
@@ -106,7 +107,7 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     }
 
     sendProjectileHit(id) {
-        console.log("Id#", id, " got hit broadcasting...")
+        // console.log("Id#", id, " got hit broadcasting...")
         let hitPlayer = room.remotes[id].player
         console.log("Health = ", hitPlayer.health, " => ", hitPlayer.health - 1)
         let damage = 1
@@ -117,12 +118,22 @@ class PlayerRemoteProxy extends server.RemoteProxy {
     }
 
     respawn() {
-        if(this.player == undefined) {
-            // let newPlayer = new Player(id)
-            // remoteRemovedPlayer.player = this.player
-            console.log("[PlayerRemoteProxy] Request to respawn. Spawning new player...")
-            this.player = new Player(room.remotes.indexOf(this))
+        // if(this.player == undefined) {
+        //     // let newPlayer = new Player(id)
+        //     // remoteRemovedPlayer.player = this.player
+        //     console.log("[PlayerRemoteProxy] Request to respawn. Spawning new player...")
+        //     this.player = new Player(room.remotes.indexOf(this))
+        // }
+        if(!this.player.isAlive) {
+            this.player.position.x = this.randomInt(-4, 4)
+            this.player.position.y = this.randomInt(-4, 4)
+            this.health = 3
+            this.player.isAlive = true
         }
+    }
+
+    randomInt(low, high) {
+        return Math.floor(Math.random() * (high - low) + low)
     }
 
 }
