@@ -140,4 +140,5 @@ class PlayerRemoteProxy extends server.RemoteProxy {
 
 }
 
+
 module.exports = PlayerRemoteProxy
