@@ -129,7 +129,7 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         if(!this.player.isAlive) {
             this.player.position.x = this.randomInt(-4, 4)
             this.player.position.y = this.randomInt(-4, 4)
-            this.player.health = 3
+            this.player.health = 1
             this.player.isAlive = true
         }
     }
