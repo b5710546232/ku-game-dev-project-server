@@ -6,7 +6,7 @@ class Player {
     },
     this.id = id;
     this.speed = 0.15
-    this.health = 1,
+    this.health = 3,
     this.isAlive = true
   }
 

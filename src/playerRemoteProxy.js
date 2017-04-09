@@ -92,11 +92,11 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         // console.log("[PlayerRmote] removing player#", id)
         room.broadcast(packet.make_remove_player(id))
         let remoteRemovedPlayer = room.remotes[id]
-        if(remoteRemovedPlayer) {
-            let newPlayer = new Player(id)
-            remoteRemovedPlayer.player = newPlayer
-        }
-        // console.log(remoteRemovedPlayer.player)
+        // if(remoteRemovedPlayer) {
+        //     let newPlayer = new Player(id)
+        //     remoteRemovedPlayer.player = newPlayer
+        // }
+        // // console.log(remoteRemovedPlayer.player)
 
     }
 
@@ -113,6 +113,15 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         hitPlayer.takeDamage(damage)
         if(!hitPlayer.isAlive) {
             this.removePlayer(id)
+        }
+    }
+
+    respawn() {
+        if(this.player == undefined) {
+            // let newPlayer = new Player(id)
+            // remoteRemovedPlayer.player = this.player
+            console.log("[PlayerRemoteProxy] Request to respawn. Spawning new player...")
+            this.player = new Player(room.remotes.indexOf(this))
         }
     }
 
