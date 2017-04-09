@@ -15,6 +15,7 @@ var packet = {
   CS_PLAYERS_INFO: 10006,
   CS_BULLET_INFO: 11002,
   CS_PROJECTILE_HIT: 11003,
+  CS_PLAYER_RESPAWN: 11004,
 
   ////////////////////////////////////////////////////////////////////////////////
   // Server to Client
@@ -87,6 +88,11 @@ packet[packet.CS_PROJECTILE_HIT] = function(remoteProxy, data) {
   remoteProxy.sendProjectileHit(id);
 }
 
+packet[packet.CS_PLAYER_RESPAWN] = function(remoteProxy, data) {
+  if(!data.completed()) return true;
+  remoteProxy.respawn();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Send Packets
 ////////////////////////////////////////////////////////////////////////////////
@@ -140,31 +146,34 @@ packet.make_chat = function (msg) {
 //   return o.buffer;
 // }
 
-packet.make_all_player_info = (players) => {
-  let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO)
-  let playerLength = players.length
-  o.append_uint8(playerLength)
-  players.forEach((player) => {
-    console.log("player",player.id)
-    console.log("player - posox",String(player.positionX))
-    o.append_uint32(player.id)
-    o.append_string(String(player.position.x))
-    o.append_string(String(player.position.y))
-  })
-  console.log("output",o)
-  o.finish();
-  return o.buffer;
-}
+// packet.make_all_player_info = (players) => {
+//   let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO)
+//   let playerLength = players.length
+//   o.append_uint8(playerLength)
+//   players.forEach((player) => {
+//     console.log("player",player.id)
+//     console.log("player - posox",String(player.positionX))
+//     o.append_uint32(player.id)
+//     o.append_string(String(player.position.x))
+//     o.append_string(String(player.position.y))
+//   })
+//   console.log("output",o)
+//   o.finish();
+//   return o.buffer;
+// }
 
 packet.make_players_info = (players) => {
   let o = new packet_writer(packet.SC_ALL_PLAYERS_INFO);
   let playerLength = players.length;
   o.append_uint8(playerLength);
   players.forEach((player) => {
-    // console.log("[Packet] Add player#", player.id, " info to packet");
-    o.append_uint8(player.id);
-    o.append_float(player.position.x);
-    o.append_float(player.position.y);
+    if(player.isAlive) {
+      // console.log("[Packet] Add player#", player.id, " info to packet");
+      o.append_uint8(player.id);
+      o.append_float(player.position.x);
+      o.append_float(player.position.y);
+      o.append_uint16(player.health);
+    }
   })
   o.finish();
   return o.buffer;
