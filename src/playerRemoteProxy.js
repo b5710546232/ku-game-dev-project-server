@@ -111,7 +111,9 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         let hitPlayer = room.remotes[id].player
         console.log("Health = ", hitPlayer.health, " => ", hitPlayer.health - 1)
         let damage = 1
-        hitPlayer.takeDamage(damage)
+        if(hitPlayer.isAlive) {
+            hitPlayer.takeDamage(damage)
+        }
         if(!hitPlayer.isAlive) {
             this.removePlayer(id)
         }
@@ -127,7 +129,7 @@ class PlayerRemoteProxy extends server.RemoteProxy {
         if(!this.player.isAlive) {
             this.player.position.x = this.randomInt(-4, 4)
             this.player.position.y = this.randomInt(-4, 4)
-            this.health = 3
+            this.player.health = 3
             this.player.isAlive = true
         }
     }

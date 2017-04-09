@@ -35,7 +35,7 @@ class Player {
   
 }
 
-var randomInt = (low, high)=> {
+let randomInt = (low, high)=> {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
