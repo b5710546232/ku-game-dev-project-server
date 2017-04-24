@@ -1,15 +1,34 @@
 class Player {
-  constructor(id) {
+  constructor(id, name) {
+
+    // Initial Position, random between -4 and 4
     this.position = {
         x: randomInt(-4, 4),
         y: randomInt(-4, 4)
       },
       this.id = id;
+    
+    // Initial speed
     this.speed = 0.15
 
+    // Player's health
     this.health = 1,
-      this.isAlive = true
 
+    // Player's damage
+    this.damage = 1,
+
+    // Player's alive status
+    this.isAlive = true
+
+    // Player's name
+    this.name = name,
+    this.score = 0,
+    this.exp = 0,
+    this.upgrades = {
+      damage: 0,
+      health: 0,
+      speed: 0
+    }
 
   }
 
